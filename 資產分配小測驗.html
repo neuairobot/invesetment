@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>專屬資產配置測驗</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --container-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --accent-color: #4CAF50;
+            --border-color: #333;
+            --hover-bg: #2a2a2a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            background-color: var(--container-bg);
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            width: 100%;
+        }
+
+        h1, h2, h3 {
+            color: #ffffff;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .question-block {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #242424;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .question-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .options label {
+            display: block;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .options label:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+            accent-color: var(--accent-color);
+        }
+
+        /* 選中狀態的視覺回饋 */
+        .options label:has(input:checked) {
+            border-color: var(--accent-color);
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
+            background-color: var(--accent-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result-container {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background-color: #1a2e1a;
+            border: 2px solid var(--accent-color);
+            border-radius: 10px;
+            animation: fadeIn 0.5s;
+        }
+
+        #result-title {
+            color: var(--accent-color);
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            margin-top: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .error-msg {
+            color: #ff5252;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>📊 找出讓你安穩入睡的專屬資產配置</h1>
+        <p>在指數化投資的長跑中，適當的債券配置能發揮緩衝作用。透過這 10 個問題，我們將為你計算出最適合你的股債比例。</p>
+    </div>
+
+    <form id="quiz-form">
+        <!-- 第1題 -->
+        <div class="question-block">
+            <div class="question-title">1. 這筆投資資金，你預計多久之後會需要動用到它（例如退休、買房、教育基金）？</div>
+            <div class="options">
+                <label><input type="radio" name="q1" value="1"> (A) 3 年以內</label>
+                <label><input type="radio" name="q1" value="2"> (B) 3 到 7 年</label>
+                <label><input type="radio" name="q1" value="3"> (C) 8 到 15 年</label>
+                <label><input type="radio" name="q1" value="4"> (D) 15 年以上，甚至打算傳承</label>
+            </div>
+        </div>
+
+        <!-- 第2題 -->
+        <div class="question-block">
+            <div class="question-title">2. 想像一下，如果明天股市突然發生崩盤，你的整體投資組合帳面價值瞬間縮水了 50%，你真實的心理狀態與行動會是？</div>
+            <div class="options">
+                <label><input type="radio" name="q2" value="1"> (A) 徹夜難眠，覺得世界末日，會立刻清空所有部位以防再跌</label>
+                <label><input type="radio" name="q2" value="2"> (B) 非常焦慮，會停扣定期定額，甚至考慮賣出部分資產變現</label>
+                <label><input type="radio" name="q2" value="3"> (C) 有點心痛，但知道這是市場常態，會咬牙持續持有並繼續扣款</label>
+                <label><input type="radio" name="q2" value="4"> (D) 感到興奮，認為這是十年難得一見的打折大拍賣，會想辦法擠出閒錢加碼</label>
+            </div>
+        </div>
+
+        <!-- 第3題 -->
+        <div class="question-block">
+            <div class="question-title">3. 你目前的工作收入與現金流狀況如何？</div>
+            <div class="options">
+                <label><input type="radio" name="q3" value="1"> (A) 收入極不穩定，或是即將面臨失業、退休、無固定收入</label>
+                <label><input type="radio" name="q3" value="2"> (B) 收入偶有起伏（如業務、自由工作者），且沒有準備足夠的緊急預備金</label>
+                <label><input type="radio" name="q3" value="3"> (C) 收入穩定，且已經準備好 3~6 個月生活費的緊急預備金</label>
+                <label><input type="radio" name="q3" value="4"> (D) 收入非常穩定（如公教、穩定大企業），且緊急預備金超過 6 個月以上</label>
+            </div>
+        </div>
+
+        <!-- 第4題 -->
+        <div class="question-block">
+            <div class="question-title">4. 回顧過去的投資經驗，當你看到新聞大幅報導「經濟衰退、熊市來臨」時，你通常的反應是？</div>
+            <div class="options">
+                <label><input type="radio" name="q4" value="1"> (A) 很容易受到新聞影響，經常根據財經新聞調整投資策略</label>
+                <label><input type="radio" name="q4" value="2"> (B) 會花很多時間盯盤，心情跟著指數上下起伏</label>
+                <label><input type="radio" name="q4" value="3"> (C) 稍微關注一下，但基本上維持原有的投資步調</label>
+                <label><input type="radio" name="q4" value="4"> (D) 幾乎不看財經新聞，遵循原先設定好的紀律，不理會市場雜音</label>
+            </div>
+        </div>
+
+        <!-- 第5題 -->
+        <div class="question-block">
+            <div class="question-title">5. 以下兩種投資組合的歷史表現，你更傾向選擇哪一種？</div>
+            <div class="options">
+                <label><input type="radio" name="q5" value="1"> (A) 最糟的年份跌 5%，最好的年份賺 8%（高度穩定，抗跌）</label>
+                <label><input type="radio" name="q5" value="2"> (B) 最糟的年份跌 15%，最好的年份賺 15%（溫和波動）</label>
+                <label><input type="radio" name="q5" value="3"> (C) 最糟的年份跌 25%，最好的年份賺 25%（顯著波動）</label>
+                <label><input type="radio" name="q5" value="4"> (D) 最糟的年份跌 45%，最好的年份賺 40%（追求極致長期報酬）</label>
+            </div>
+        </div>
+
+        <!-- 第6題 -->
+        <div class="question-block">
+            <div class="question-title">6. 對於「債券在投資組合中的作用」，你的理解與期待是什麼？</div>
+            <div class="options">
+                <label><input type="radio" name="q6" value="1"> (A) 債券是主要的收益來源，我希望靠它產生穩定的現金流</label>
+                <label><input type="radio" name="q6" value="2"> (B) 債券是保本的工具，我不希望投資組合有太大的虧損風險</label>
+                <label><input type="radio" name="q6" value="3"> (C) 債券是股市大跌時的緩衝墊，犧牲一點長期報酬來換取心理安穩</label>
+                <label><input type="radio" name="q6" value="4"> (D) 債券會拖累長期的複利成長動能，我盡量不想持有它</label>
+            </div>
+        </div>
+
+        <!-- 第7題 -->
+        <div class="question-block">
+            <div class="question-title">7. 你如何看待「通貨膨脹」對資產的影響？</div>
+            <div class="options">
+                <label><input type="radio" name="q7" value="1"> (A) 只要帳面數字不減少就好，不太在意通膨吃掉購買力</label>
+                <label><input type="radio" name="q7" value="2"> (B) 知道通膨的可怕，但還是害怕市場波動大於通膨風險</label>
+                <label><input type="radio" name="q7" value="3"> (C) 希望資產成長率能穩定打敗通膨，願意承擔適度波動</label>
+                <label><input type="radio" name="q7" value="4"> (D) 認為股票是長期對抗通膨最強的資產，願意為了高實質報酬忍受任何波動</label>
+            </div>
+        </div>
+
+        <!-- 第8題 -->
+        <div class="question-block">
+            <div class="question-title">8. 如果你的投資組合在過去三年已經連續上漲了 60%，今年突然回檔下跌 20%，你會怎麼想？</div>
+            <div class="options">
+                <label><input type="radio" name="q8" value="1"> (A) 覺得之前的獲利都快吐光了，趕快獲利了結</label>
+                <label><input type="radio" name="q8" value="2"> (B) 覺得有些不安，考慮將資金轉移到定存或保單</label>
+                <label><input type="radio" name="q8" value="3"> (C) 明白均值回歸的道理，接受這只是長期成長軌跡中的正常回檔</label>
+                <label><input type="radio" name="q8" value="4"> (D) 覺得估值變便宜了，開始檢查投資紀錄準備逢低佈局</label>
+            </div>
+        </div>
+
+        <!-- 第9題 -->
+        <div class="question-block">
+            <div class="question-title">9. 你對於了解金融市場歷史（如歷次股災的恢復期）的程度？</div>
+            <div class="options">
+                <label><input type="radio" name="q9" value="1"> (A) 完全不了解，只憑感覺或聽信親友建議投資</label>
+                <label><input type="radio" name="q9" value="2"> (B) 略知一二，但遇到下跌還是會覺得「這次不一樣」</label>
+                <label><input type="radio" name="q9" value="3"> (C) 讀過幾本經典投資書籍，了解股市長期向上且必定伴隨大跌</label>
+                <label><input type="radio" name="q9" value="4"> (D) 對市場歷史與行為金融學有深入研究，信仰堅定，不受短期恐慌動搖</label>
+            </div>
+        </div>
+
+        <!-- 第10題 -->
+        <div class="question-block">
+            <div class="question-title">10. 關於資產配置的最終妥協，你最認同以下哪一句話？</div>
+            <div class="options">
+                <label><input type="radio" name="q10" value="1"> (A) 睡得著比什麼都重要，哪怕報酬率只能勉強打平通膨。</label>
+                <label><input type="radio" name="q10" value="2"> (B) 我需要一點報酬，但絕對無法承受超過三成的資產縮水。</label>
+                <label><input type="radio" name="q10" value="3"> (C) 我願意用一點點潛在報酬，換取股市崩盤時不至於恐慌拋售的心理安穩。</label>
+                <label><input type="radio" name="q10" value="4"> (D) 年輕與時間就是本錢，任何阻礙資產長期最大化複利的配置都是多餘的。</label>
+            </div>
+        </div>
+
+        <div id="error-msg" class="error-msg">⚠️ 請完成所有 10 個問題後再送出！</div>
+        <button type="submit" id="submit-btn">計算我的專屬資產配置</button>
+    </form>
+
+    <!-- 結果顯示區 -->
+    <div id="result-container">
+        <h2 id="result-title"></h2>
+        <div id="result-desc"></div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('quiz-form');
+    const resultContainer = document.getElementById('result-container');
+    const resultTitle = document.getElementById('result-title');
+    const resultDesc = document.getElementById('result-desc');
+    const errorMsg = document.getElementById('error-msg');
+    const totalQuestions = 10;
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        let score = 0;
+        let answeredCount = 0;
+
+        // 計算分數與檢查是否全填
+        for (let i = 1; i <= totalQuestions; i++) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            if (selected) {
+                score += parseInt(selected.value);
+                answeredCount++;
+            }
+        }
+
+        // 防呆：如果沒填完
+        if (answeredCount < totalQuestions) {
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        // 隱藏錯誤訊息與送出按鈕
+        errorMsg.style.display = 'none';
+        document.getElementById('submit-btn').style.display = 'none';
+
+        // 根據分數判定結果
+        let titleText = "";
+        let descHTML = "";
+
+        if (score >= 10 && score <= 16) {
+            titleText = "【防禦型配置】建議債券比例 40% - 60%";
+            descHTML = `
+                <p><strong>你的屬性：</strong> 你對於資產的波動極度敏感，「保本」與「安穩」是你投資的首要考量。你可能距離需要用錢的時間較近，或是現金流不容許太大的風險。</p>
+                <p><strong>配置解析：</strong> 股市的大幅回檔會讓你夜不能寐，為了避免在最差的時機恐慌性拋售，高比例的債券是你必須的護城河。雖然這會削弱長期的複利成長動能，但確保你能安心留在市場上，才是最適合你的贏家策略。</p>
+            `;
+        } else if (score >= 17 && score <= 24) {
+            titleText = "【穩健型配置】建議債券比例 25% - 35%";
+            descHTML = `
+                <p><strong>你的屬性：</strong> 你理解投資需要承擔風險，但如果資產腰斬，你依然會感到極度焦慮，甚至影響生活品質。</p>
+                <p><strong>配置解析：</strong> 你需要一個強而有力的緩衝墊。25% 以上的債券配置能有效降低投資過程的顛簸感，讓帳面價值的縮水幅度控制在你的心理承受邊界內。請注意，這是一個用「較低長期報酬」來換取「大幅度心理舒適」的選擇。</p>
+            `;
+        } else if (score >= 25 && score <= 33) {
+            titleText = "【黃金妥協型配置】建議債券比例 10% - 25%";
+            descHTML = `
+                <p><strong>你的屬性：</strong> 你具備良好的投資心理素質與觀念，追求資產成長，但也不想在百年一遇的股災中考驗自己的人性底線。</p>
+                <p><strong>配置解析：</strong> 加入 10% 到 25% 的債券是一個極佳的折衷方案。這種微調藝術能在股市大跌時發揮防禦作用，讓帳面不至於縮水得太過驚人；同時，因為債券比例未超過 25%，它對長期複利成長動能的削弱仍在可接受的範圍內。這正是「用一點點潛在報酬，換取心理安穩」的最佳實踐。</p>
+            `;
+        } else if (score >= 34 && score <= 40) {
+            titleText = "【純粹增長型配置】建議債券比例 0% - 10%";
+            descHTML = `
+                <p><strong>你的屬性：</strong> 你是堅定的市場樂觀主義者，擁有極長的投資時間軸，且對短中期的劇烈波動具備極高的免疫力。</p>
+                <p><strong>配置解析：</strong> 看到資產縮水 50% 你依然能安穩入睡，甚至視為加碼良機。對你而言，任何超過 10% 的債券配置都是在拖累長期的資金效率與複利效應。全股票（或極低債券）的配置將帶給你最大的長期期望報酬，前提是你真的能在未來的狂風暴雨中做到知行合一，緊握不放。</p>
+            `;
+        }
+
+        // 顯示結果
+        resultTitle.innerText = `總分：${score} 分 | ${titleText}`;
+        resultDesc.innerHTML = descHTML;
+        resultContainer.style.display = 'block';
+
+        // 平滑滾動到結果區
+        resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+</script>
+
+</body>
+</html>
