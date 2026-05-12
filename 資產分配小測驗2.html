@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投資安眠度大測驗</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --container-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --accent-color: #ff9800; /* 改用活潑的橘色系 */
+            --border-color: #333;
+            --hover-bg: #2a2a2a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            background-color: var(--container-bg);
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            width: 100%;
+        }
+
+        h1, h2, h3 {
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .question-block {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #242424;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .question-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #ffcc80;
+        }
+
+        .options label {
+            display: block;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .options label:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+            accent-color: var(--accent-color);
+        }
+
+        .options label:has(input:checked) {
+            border-color: var(--accent-color);
+            background-color: rgba(255, 152, 0, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
+            background-color: var(--accent-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #e68a00;
+        }
+
+        #result-container {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background-color: #2e1f0c;
+            border: 2px solid var(--accent-color);
+            border-radius: 10px;
+            animation: fadeIn 0.5s;
+        }
+
+        #result-title {
+            color: var(--accent-color);
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            margin-top: 0;
+            text-align: left;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .error-msg {
+            color: #ff5252;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>投資安眠度大測驗</h1>
+        <p>投資就像過日子，有人喜歡搭高鐵，有人喜歡散步。透過 20 個超真實的生活情境，測出你骨子裡到底適合持有多少債券，才能在股海中安穩入睡！</p>
+    </div>
+
+    <form id="quiz-form">
+        <div class="question-block">
+            <div class="question-title">1. 如果你今天要去遊樂園，你第一個排隊的設施會是？</div>
+            <div class="options">
+                <label><input type="radio" name="q1" value="1"> 旋轉木馬，安全悠哉最重要</label>
+                <label><input type="radio" name="q1" value="2"> 碰碰車，有點刺激但不會飛出去</label>
+                <label><input type="radio" name="q1" value="3"> 海盜船，享受心臟漏一拍的感覺</label>
+                <label><input type="radio" name="q1" value="4"> 360度大怒神雲霄飛車，越恐怖越爽</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">2. 你昨天剛買了一雙原價 3000 元的限量鞋，今天經過鞋店發現居然打對折只要 1500 元，你的反應是？</div>
+            <div class="options">
+                <label><input type="radio" name="q2" value="1"> 氣到睡不著，覺得自己被當盤子，想拿去退貨</label>
+                <label><input type="radio" name="q2" value="2"> 心情很差，一整天都在碎碎念運氣不好</label>
+                <label><input type="radio" name="q2" value="3"> 摸摸鼻子算了，早買早享受，晚買享折扣</label>
+                <label><input type="radio" name="q2" value="4"> 太棒了吧！立刻再買兩雙不同顏色的來平攤成本（攤平）</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">3. 玩多人連線 RPG 遊戲時，你通常喜歡選什麼職業？</div>
+            <div class="options">
+                <label><input type="radio" name="q3" value="1"> 補師/牧師，躲在後面幫大家補血最安全</label>
+                <label><input type="radio" name="q3" value="2"> 坦克/聖騎士，皮厚血多，被怪打也不太痛</label>
+                <label><input type="radio" name="q3" value="3"> 戰士/弓箭手，攻守均衡，穩定輸出</label>
+                <label><input type="radio" name="q3" value="4"> 刺客/狂戰士，防禦力極低但爆擊傷害超高，不是你死就是我亡</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">4. 開車上高速公路，如果遇到大塞車，導航顯示「有一條未知的山路小徑可以省下 30 分鐘」，你會？</div>
+            <div class="options">
+                <label><input type="radio" name="q4" value="1"> 絕對不走，乖乖排隊，至少知道自己在哪裡</label>
+                <label><input type="radio" name="q4" value="2"> 查一下地圖，如果路徑看起來太彎曲就放棄</label>
+                <label><input type="radio" name="q4" value="3"> 跟著前方的幾台車一起繞路看看</label>
+                <label><input type="radio" name="q4" value="4"> 毫不猶豫直接轉彎，大不了迷路當作探險</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">5. 朋友推薦了一間「超級好吃但常會拉肚子」的神秘路邊攤，你會去吃嗎？</div>
+            <div class="options">
+                <label><input type="radio" name="q5" value="1"> 絕對不要，身體健康比美食重要多了</label>
+                <label><input type="radio" name="q5" value="2"> 除非看別人吃都沒事，我才會考慮吃一小口</label>
+                <label><input type="radio" name="q5" value="3"> 準備好胃藥，為了傳說中的美食賭一把</label>
+                <label><input type="radio" name="q5" value="4"> 直接點大份的！拉肚子就當作順便清腸胃減肥</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">6. 買了新手機，你會怎麼保護它？</div>
+            <div class="options">
+                <label><input type="radio" name="q6" value="1"> 買最厚的軍規防摔殼＋鏡頭貼＋螢幕貼，包得像木乃伊</label>
+                <label><input type="radio" name="q6" value="2"> 裝個普通的透明軟殼跟基本保護貼</label>
+                <label><input type="radio" name="q6" value="3"> 只貼螢幕保護貼，背面享受原機質感</label>
+                <label><input type="radio" name="q6" value="4"> 什麼都不裝，裸機手感才是王道，摔壞就換新的</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">7. 遇到突如其來的夏日午後大雷雨，但你沒帶傘，離捷運站還有 10 分鐘路程，你會？</div>
+            <div class="options">
+                <label><input type="radio" name="q7" value="1"> 直接走進旁邊的便利商店買一把超貴的傘</label>
+                <label><input type="radio" name="q7" value="2"> 躲在屋簷下等雨停，就算要等一個小時也沒關係</label>
+                <label><input type="radio" name="q7" value="3"> 拿包包頂在頭上，半跑半走衝過去</label>
+                <label><input type="radio" name="q7" value="4"> 直接在暴雨中漫步，當作拍 MV，反正衣服會乾</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">8. 收到公司發的 10 萬元年度獎金，你第一時間會怎麼處置？</div>
+            <div class="options">
+                <label><input type="radio" name="q8" value="1"> 全部存進銀行定存，看著數字增加才有安全感</label>
+                <label><input type="radio" name="q8" value="2"> 8萬存起來，2萬拿去吃頓好的犒賞自己</label>
+                <label><input type="radio" name="q8" value="3"> 拿一半去投資，一半留著當備用金</label>
+                <label><input type="radio" name="q8" value="4"> All in 買進觀望很久的高風險成長股或加密貨幣</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">9. 看一部長達 50 集的懸疑劇，但第一集步調超慢，你會？</div>
+            <div class="options">
+                <label><input type="radio" name="q9" value="1"> 覺得浪費時間，立刻棄劇改看搞笑短片</label>
+                <label><input type="radio" name="q9" value="2"> 直接去網路上搜「結局是什麼」，以免浪費時間</label>
+                <label><input type="radio" name="q9" value="3"> 開 1.5 倍速加減看，給它幾集機會</label>
+                <label><input type="radio" name="q9" value="4"> 堅定地慢慢看，相信後面的劇情一定會迎來神級大反轉</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">10. 出國自由行的行程安排，你偏好哪一種風格？</div>
+            <div class="options">
+                <label><input type="radio" name="q10" value="1"> 製作精美 Excel 表，每個景點精準到分鐘，不能有任何差錯</label>
+                <label><input type="radio" name="q10" value="2"> 列出每天必去的 2-3 個大點，剩下時間彈性安排</label>
+                <label><input type="radio" name="q10" value="3"> 只買好機票跟第一天住宿，剩下到當地再查</label>
+                <label><input type="radio" name="q10" value="4"> 隨便指地圖上一個地方就出發，走到哪睡到哪</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">11. 如果你有一個超能力，你希望是？</div>
+            <div class="options">
+                <label><input type="radio" name="q11" value="1"> 絕對防禦盾牌：永遠不會受傷、不會生病</label>
+                <label><input type="radio" name="q11" value="2"> 預知未來 5 分鐘：可以避開即將發生的小災難</label>
+                <label><input type="radio" name="q11" value="3"> 瞬間移動：可以快速到達任何地方探索世界</label>
+                <label><input type="radio" name="q11" value="4"> 心想事成的魔法：雖然施法偶爾會暴走失控，但可能創造奇蹟</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">12. 冰箱裡有一罐鮮奶，剛剛過期了一天，聞起來沒壞，你會？</div>
+            <div class="options">
+                <label><input type="radio" name="q12" value="1"> 絕不妥協，立刻倒掉，一點風險都不冒</label>
+                <label><input type="radio" name="q12" value="2"> 拿來煮濃湯或加熱殺菌後再喝，比較保險</label>
+                <label><input type="radio" name="q12" value="3"> 倒一小杯喝喝看，沒事就繼續喝</label>
+                <label><input type="radio" name="q12" value="4"> 才過期一天算什麼！直接拿起來大口灌下去</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">13. 你對待手機電池電量的態度是？</div>
+            <div class="options">
+                <label><input type="radio" name="q13" value="1"> 掉到 80% 就開始焦慮，隨身攜帶三顆行動電源</label>
+                <label><input type="radio" name="q13" value="2"> 掉到 50% 才會開始找插座充電</label>
+                <label><input type="radio" name="q13" value="3"> 掉到 20% 出現紅血條才拿充電線出來</label>
+                <label><input type="radio" name="q13" value="4"> 常常用到 1% 自動關機，一切隨緣</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">14. 如果你的人生是一部電影，你希望它是什麼類型？</div>
+            <div class="options">
+                <label><input type="radio" name="q14" value="1"> 溫馨日常番：平平安安，沒有反派，歲月靜好</label>
+                <label><input type="radio" name="q14" value="2"> 浪漫喜劇片：偶有波折誤會，但最後一定是 Happy Ending</label>
+                <label><input type="radio" name="q14" value="3"> 動作冒險片：充滿挑戰與關卡，主角不斷升級打怪</label>
+                <label><input type="radio" name="q14" value="4"> 末日生存片：局勢瘋狂動盪，隨時有喪屍，但存活下來就能稱王</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">15. 面對工作上的新任務，主管說「這個案子很難，失敗會被扣薪，成功獎金翻倍」，你會？</div>
+            <div class="options">
+                <label><input type="radio" name="q15" value="1"> 找藉口推掉，保住底薪才是真的</label>
+                <label><input type="radio" name="q15" value="2"> 猶豫很久，最後決定接下，但每天壓力大到失眠</label>
+                <label><input type="radio" name="q15" value="3"> 覺得是個好機會，擬定計畫努力拼一把</label>
+                <label><input type="radio" name="q15" value="4"> 興奮到跳起來！立刻搶下案子，就是喜歡這種高風險高回報的刺激</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">16. 去吃到飽自助餐，你的策略是？</div>
+            <div class="options">
+                <label><input type="radio" name="q16" value="1"> 先吃一大盤炒飯或麵包墊墊胃，確保一定會飽</label>
+                <label><input type="radio" name="q16" value="2"> 每種菜色都拿一點點，均衡飲食</label>
+                <label><input type="radio" name="q16" value="3"> 專攻生魚片跟牛肉，吃回本最重要</label>
+                <label><input type="radio" name="q16" value="4"> 從頭到尾只吃哈根達斯冰淇淋跟最貴的海鮮，不吃撐不回家</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">17. 半夜睡覺時突然停電，外面一片漆黑，你會？</div>
+            <div class="options">
+                <label><input type="radio" name="q17" value="1"> 嚇醒，立刻摸黑尋找手電筒，整晚不敢睡</label>
+                <label><input type="radio" name="q17" value="2"> 拿起手機查新聞看停電原因，等到復電才安心</label>
+                <label><input type="radio" name="q17" value="3"> 點個蠟燭，覺得還滿有情調的，順其自然</label>
+                <label><input type="radio" name="q17" value="4"> 翻個身繼續呼呼大睡，反正明天太陽一樣會升起</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">18. 買刮刮樂或樂透時，你的心態通常是？</div>
+            <div class="options">
+                <label><input type="radio" name="q18" value="1"> 從來不買，覺得那是浪費錢把錢丟進水裡</label>
+                <label><input type="radio" name="q18" value="2"> 過年買個 100 元沾沾喜氣就好，沒中就算了</label>
+                <label><input type="radio" name="q18" value="3"> 會定期買一點，當作買個希望與作夢的權利</label>
+                <label><input type="radio" name="q18" value="4"> 仔細研究機率包牌，認為這是快速致富的捷徑</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">19. 新科技或新軟體（例如最新一代的AI工具）剛推出時，你的態度是？</div>
+            <div class="options">
+                <label><input type="radio" name="q19" value="1"> 堅決不用，等大家用個三五年證明絕對安全再說</label>
+                <label><input type="radio" name="q19" value="2"> 先看網路上別人的評測跟教學，有空再試試</label>
+                <label><input type="radio" name="q19" value="3"> 馬上註冊帳號玩玩看，雖然還有 Bug 但覺得很有趣</label>
+                <label><input type="radio" name="q19" value="4"> 直接買最高級的付費版，就是要當走在最前面的先驅者</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-title">20. 總結以上所有的情境，你覺得投資理財對你而言最像什麼？</div>
+            <div class="options">
+                <label><input type="radio" name="q20" value="1"> 像「種樹」：買了就放在那邊，幾十年後有樹蔭乘涼就好，不要煩我</label>
+                <label><input type="radio" name="q20" value="2"> 像「開車」：要隨時看後照鏡、注意路況，保持安全距離</label>
+                <label><input type="radio" name="q20" value="3"> 像「衝浪」：要會看浪頭，順勢而為，享受乘風破浪的樂趣</label>
+                <label><input type="radio" name="q20" value="4"> 像「高空跳傘」：充滿極限刺激，只要降落傘沒壞，一切都是爽度</label>
+            </div>
+        </div>
+
+        <div id="error-msg" class="error-msg">⚠️ 哎呀！你還有題目沒填完喔，請檢查一下！</div>
+        <button type="submit" id="submit-btn">看結果！測出我的最佳股債配置</button>
+    </form>
+
+    <div id="result-container">
+        <h2 id="result-title"></h2>
+        <div id="result-desc"></div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('quiz-form');
+    const resultContainer = document.getElementById('result-container');
+    const resultTitle = document.getElementById('result-title');
+    const resultDesc = document.getElementById('result-desc');
+    const errorMsg = document.getElementById('error-msg');
+    const totalQuestions = 20;
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        let score = 0;
+        let answeredCount = 0;
+
+        for (let i = 1; i <= totalQuestions; i++) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            if (selected) {
+                score += parseInt(selected.value);
+                answeredCount++;
+            }
+        }
+
+        if (answeredCount < totalQuestions) {
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        errorMsg.style.display = 'none';
+        document.getElementById('submit-btn').style.display = 'none';
+
+        let titleText = "";
+        let descHTML = "";
+
+        if (score >= 20 && score <= 34) {
+            titleText = "【防禦滿點的安全氣囊】建議債券比例：50% - 80%";
+            descHTML = `
+                <p><strong>你的生活哲學：</strong> 小心駛得萬年船。在生活中，你極度討厭意外與失控感，安全感是你一生的追求。手機電量要滿、出門要帶傘、過期食物絕對不碰。</p>
+                <p><strong>投資配置解析：</strong> 你在市場上的痛覺神經非常發達！只要帳面縮水一點點，你就容易吃不下飯、睡不好覺。為了保護你脆弱的心靈（以及避免你在股災時恐慌全拋），你需要配置非常高比例的債券來當作安全氣囊。雖然會犧牲長期報酬，但「晚上睡得著」對你來說絕對比賺大錢更重要。</p>
+            `;
+        } else if (score >= 35 && score <= 49) {
+            titleText = "【穩紮穩打的避震器】建議債券比例：30% - 50%";
+            descHTML = `
+                <p><strong>你的生活哲學：</strong> 理性務實的現實主義者。你願意承擔一點點風險來換取好處，但前提是這個風險必須在你的計算與掌控之內。太瘋狂的行為你絕對不參與。</p>
+                <p><strong>投資配置解析：</strong> 你的心臟強度屬於一般人水準，股市下跌 20% 你還能忍受，但如果腰斬 50% 你絕對會崩潰。配置 30% 到 50% 的債券能為你的投資組合裝上優良的「避震器」，讓你在經歷市場大跌的坑洞時，只會感覺到顛簸，而不至於翻車停損。</p>
+            `;
+        } else if (score >= 50 && score <= 64) {
+            titleText = "【乘風破浪的衝浪板】建議債券比例：10% - 30%";
+            descHTML = `
+                <p><strong>你的生活哲學：</strong> 擁抱變化的冒險家。你不怕挑戰，甚至覺得生活有點波折才有趣。遇到塞車敢走捷徑、遇到打折敢大力買進，心態相當有彈性。</p>
+                <p><strong>投資配置解析：</strong> 你有著不錯的心理素質，知道高風險伴隨高報酬。股市的回檔對你來說只是「買進特價品」的訊號。你只需要配置少量的債券（10%~30%）作為心理緩衝和逢低加碼的資金池即可。這是一個兼顧「追求最大長期資產增長」與「防範極端黑天鵝」的黃金妥協方案。</p>
+            `;
+        } else if (score >= 65 && score <= 80) {
+            titleText = "【雲霄飛車的頭等艙】建議債券比例：0% - 10%";
+            descHTML = `
+                <p><strong>你的生活哲學：</strong> 追求極致的硬核玩家。你膽大包天，越危險的地方你越覺得興奮。買東西買爆、玩遊戲全點攻擊力，人生就是一場要玩得轟轟烈烈的遊戲。</p>
+                <p><strong>投資配置解析：</strong> 債券？那是什麼？能吃嗎？你的神經有如鋼鐵般粗大，即使帳面資產瞬間蒸發 50%，你照樣能呼呼大睡。對你來說，任何抗跌的債券配置都是在拖累你創造暴富的效率。全股票（甚至帶點槓桿）才是你的歸宿，只要確保你能一直保持這份霸氣，長期下來市場會給你最豐厚的回報。</p>
+            `;
+        }
+
+        resultTitle.innerText = `總分：${score} 分 | ${titleText}`;
+        resultDesc.innerHTML = descHTML;
+        resultContainer.style.display = 'block';
+
+        resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+</script>
+
+</body>
+</html>
